@@ -1,17 +1,62 @@
 #!/bin/bash
 
 SRC_LIST="/etc/apt/sources.list.d/linuxmuster-vbox.list"
+USERPASS=`pwgen 12 1`
+PHPVBOXUSER="vboxuser"
+VBOXHOME="/srv/virtualbox"
+PHPVBOXCONF="/usr/share/phpvirtualbox/config.php"
 
+
+# REPOS einrichten -----------
 echo "# Oracle virtualbox repository" > $SRC_LIST
 echo "deb http://download.virtualbox.org/virtualbox/debian  precise contrib" >> $SRC_LIST
 echo >> $SRC_LIST
 echo "# linuxmuster.net repository" >> $SRC_LIST
 echo "deb http://pkg.linuxmuster.net/ precise/" >> $SRC_LIST
 echo "deb-src http://pkg.linuxmuster.net/ precise/" >> $SRC_LIST
-
+# Schlüssel importieren
 wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | apt-key add -
 wget -q http://pkg.linuxmuster.net/linuxmuster.net.key -O- | apt-key add -
-
+# Paketliste aktualisieren
 apt-get update 
-apt-get install virtualbox-4.2
+# Pakete installieren
+apt-get -y install virtualbox-4.2 apache2 pwgen php5
+
+# APACHE -------------
+# ssl Modul aktivieren
+
+apachectl -M | grep ssl_module > /dev/null 2>&1|| a2enmod ssl
+# standard Config löschen, phpvirtualbox al document root einrichten
+rm -f /etc/apache2/sites-enabled/000-default
+if [ -h /etc/apache2/sites-enabled/phpvirtualbox ]; then 
+  rm /etc/apache2/sites-enabled/phpvirtualbox; 
+fi
+ln -s /etc/apache2/sites-available/phpvirtualbox  /etc/apache2/sites-enabled/phpvirtualbox
+# Apache neu starten
+service apache2 restart
+
+# BENUTZER für die virtuellen Maschinen -----
+# vboxuser anlegen/passwort setzen
+id $PHPVBOXUSER > /dev/null 2>&1 && usermod -d $VBOXHOME -g vboxusers -s /bin/bash $PHPVBOXUSER
+id $PHPVBOXUSER > /dev/null 2>&1 || useradd -d $VBOXHOME -g vboxusers -s /bin/bash $PHPVBOXUSER
+if [ ! -d $VBOXHOME ]; then
+  mkdir -p $VBOXHOME
+  chown ${PHPVBOXUSER}: $VBOXHOME
+fi
+# setting password
+echo "${PHPVBOXUSER}:${USERPASS}"
+echo "${PHPVBOXUSER}:${USERPASS}" | chpasswd
+
+# phpvirtualbox Konfiguration anpassen
+sed -i "s/^var.*username.*=.*$/var \$username = \'${PHPVBOXUSER}\';/"  $PHPVBOXCONF
+sed -i "s/^var.*password.*=.*$/var \$password = \'${USERPASS}\';/"  $PHPVBOXCONF
+
+# Entfernt alle evtl vorhandenen Startlinks
+# für den vbox web service
+update-rc.d -f vboxweb-service remove
+# Legt die Startlinks neu an
+update-rc.d -f vboxweb-service defaults
+# vboxweb service neu starten
+/etc/init.d/vboxweb-service stop
+/etc/init.d/vboxweb-service start
 
