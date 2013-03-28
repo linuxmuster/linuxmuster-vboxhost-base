@@ -1,0 +1,17 @@
+#!/bin/bash
+
+SRC_LIST="/etc/apt/sources.list.d/linuxmuster-vbox.list"
+
+echo "# Oracle virtualbox repository" > $SRC_LIST
+echo "deb http://download.virtualbox.org/virtualbox/debian  precise contrib" >> $SRC_LIST
+echo >> $SRC_LIST
+echo "# linuxmuster.net repository" >> $SRC_LIST
+echo "deb http://pkg.linuxmuster.net/ precise/" >> $SRC_LIST
+echo "deb-src http://pkg.linuxmuster.net/ precise/" >> $SRC_LIST
+
+wget -q http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc -O- | apt-key add -
+wget -q http://pkg.linuxmuster.net/linuxmuster.net.key -O- | apt-key add -
+
+apt-get update 
+apt-get install virtualbox-4.2
+
