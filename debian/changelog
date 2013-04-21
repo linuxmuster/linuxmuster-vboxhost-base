@@ -1,3 +1,11 @@
+linuxmuster-vboxhost-base (0.1ubuntu2) precise; urgency=low
+
+  * Rohversion Skript für virtualbox update
+  * Extensionpack autoinstallation
+  * Rohversion Skript für Ausführung von vboxmanage als vboxuser
+
+ -- Frank Schiebel <frank@linuxmuster.net>  Sun, 21 Apr 2013 17:39:08 +0200
+
 linuxmuster-vboxhost-base (0.1ubuntu1) precise; urgency=low
 
   * Erste funktionierende Version
