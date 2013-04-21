@@ -6,6 +6,11 @@ VBOXHOME="/srv/virtualbox"
 PHPVBOXCONF="/usr/share/phpvirtualbox/config.php"
 
 
+# phpvirtualbox config kopieren, wenn es die noch nicht gibt
+if [ ! -f ${PHPVBOXCONF} ]; then 
+    cp ${PHPVBOXCONF}-linuxmuster ${PHPVBOXCONF}
+fi
+
 # REPOS einrichten -----------
 echo "# Oracle virtualbox repository" > $SRC_LIST
 echo "deb http://download.virtualbox.org/virtualbox/debian  precise contrib" >> $SRC_LIST
