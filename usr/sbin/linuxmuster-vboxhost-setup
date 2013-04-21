@@ -1,7 +1,6 @@
 #!/bin/bash
 
 SRC_LIST="/etc/apt/sources.list.d/linuxmuster-vbox.list"
-USERPASS=`pwgen 12 1`
 PHPVBOXUSER="vboxuser"
 VBOXHOME="/srv/virtualbox"
 PHPVBOXCONF="/usr/share/phpvirtualbox/config.php"
@@ -36,6 +35,8 @@ ln -s /etc/apache2/sites-available/phpvirtualbox  /etc/apache2/sites-enabled/php
 service apache2 restart
 
 # BENUTZER für die virtuellen Maschinen -----
+# Passwort generieren (ght nicht früher weil pwgen installiert sein muss)
+USERPASS=`pwgen 12 1`
 # vboxuser anlegen/passwort setzen
 id $PHPVBOXUSER > /dev/null 2>&1 && usermod -d $VBOXHOME -g vboxusers -s /bin/bash $PHPVBOXUSER
 id $PHPVBOXUSER > /dev/null 2>&1 || useradd -d $VBOXHOME -g vboxusers -s /bin/bash $PHPVBOXUSER
