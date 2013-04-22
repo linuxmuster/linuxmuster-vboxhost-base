@@ -1,3 +1,11 @@
+linuxmuster-vboxhost-base (0.1ubuntu3) precise; urgency=low
+
+  * QnD Skript zum erzeugen von VMDK dateien für Direktzugriff auf LVM-Volumes
+  * vboxtool hinzugefügt
+  * vboxuser wird der disk Gruppe hinzugegfügt
+
+ -- Frank Schiebel <frank@linuxmuster.net>  Mon, 22 Apr 2013 17:23:51 +0200
+
 linuxmuster-vboxhost-base (0.1ubuntu2) precise; urgency=low
 
   * Rohversion Skript für virtualbox update
