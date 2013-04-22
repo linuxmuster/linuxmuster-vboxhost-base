@@ -2,9 +2,9 @@
 
 # Dieses Skript ist soooo QnD, das darf keiner sehen...
 
-if [ $1 == "lvm2vmdk" ]; then
+if [ "$1" == "lvm2vmdk" ]; then
 
-if [ -e $2 -a x$3 != "x" ]; then 
+if [ -e "$2" -a "x$3" != "x" ]; then 
 	mkdir -p /srv/virtualbox/VirtualBox\ VMs/rawdisks
 	vboxmanage internalcommands createrawvmdk -filename /srv/virtualbox/VirtualBox\ VMs/rawdisks/$3.vmdk -rawdisk $2
 fi
@@ -12,4 +12,4 @@ fi
 exit 0
 fi
 
-su - vboxuser -c "$1"
+su - vboxuser -c "vboxmanage $1"
