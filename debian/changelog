@@ -1,3 +1,9 @@
+linuxmuster-vboxhost-base (0.1ubuntu4) precise; urgency=low
+
+  * Fixed extpack dl
+
+ -- Frank Schiebel <frank@linuxmuster.net>  Tue, 24 Sep 2013 09:26:32 +0200
+
 linuxmuster-vboxhost-base (0.1ubuntu3) precise; urgency=low
 
   * QnD Skript zum erzeugen von VMDK dateien für Direktzugriff auf LVM-Volumes

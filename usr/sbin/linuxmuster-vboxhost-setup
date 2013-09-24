@@ -58,8 +58,9 @@ sed -i "s/^var.*username.*=.*$/var \$username = \'${PHPVBOXUSER}\';/"  $PHPVBOXC
 sed -i "s/^var.*password.*=.*$/var \$password = \'${USERPASS}\';/"  $PHPVBOXCONF
 
 # Extension pack instalieren
-VBOXVERSION=`dpkg -l virtualbox-4.2  |grep ii | awk '{print $3}' | awk -F'~' '{print $1}'`
-EXTPACKURI="http://download.virtualbox.org/virtualbox/4.2.12/Oracle_VM_VirtualBox_Extension_Pack-${VBOXVERSION}.vbox-extpack"
+VBOXVERSION=`dpkg -l virtualbox-4.2  | grep Oracle | awk '{print $3}' | awk -F'~' '{print $1}'`
+VBOXDIR=`dpkg -l virtualbox-4.2  | grep Oracle | awk '{print $3}' | awk -F'~' '{print $1}' | awk -F'-' '{print $1}'`
+EXTPACKURI="http://download.virtualbox.org/virtualbox/${VBOXDIR}/Oracle_VM_VirtualBox_Extension_Pack-${VBOXVERSION}.vbox-extpack"
 EXTPACKTMP=/tmp/Oracle_VM_VirtualBox_Extension_Pack-${VBOXVERSION}.vbox-extpack
 wget $EXTPACKURI -O $EXTPACKTMP
 vboxmanage extpack install $EXTPACKTMP
